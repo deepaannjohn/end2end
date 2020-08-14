@@ -1,0 +1,41 @@
+version: '3'
+services:
+  app1:
+    image: 'deepaannjohn/express-app1:0.0.2'
+    ports:
+      - "3000:3000"
+    links:
+      - db:db  
+    environment:     
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+      - MYSQL_DB=e2e
+      - MYSQL_HOST=db
+      - MYSQL_ROOT_PASSWORD=example
+  app2:
+    image: 'deepaannjohn/express-app2:0.0.2'
+    ports:
+      - "3001:3001"
+    links:
+      - db:db
+    environment:     
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+      - MYSQL_DB=e2e
+      - MYSQL_HOST=db
+      - MYSQL_ROOT_PASSWORD=example
+  db:
+    image: 'deepaannjohn/mysql-server:0.0.1'
+    ports:
+      - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_USER:user
+      - MYSQL_PASSWORD:pass
+  reverse-proxy:
+    image: 'deepaannjohn/mynginx:0.0.1'
+    ports:
+      - "3002:80"
